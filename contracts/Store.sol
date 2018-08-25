@@ -3,7 +3,7 @@ pragma solidity ^0.4.11;
 contract Store {
  
     address owner;
-    string name;
+    bytes32 name;
     address factory;
     uint count = 0;
     uint balance;
@@ -13,14 +13,15 @@ contract Store {
         uint price;
         uint quantity;
     }
+
    
-    constructor(string _name) {
+    constructor(bytes32 _name) {
         
         owner = msg.sender;
         name = _name;
     }
  
-    function getStoreName() view public  returns (string) {
+    function getStoreName() view public returns (bytes32) {
         return name;
     }
     

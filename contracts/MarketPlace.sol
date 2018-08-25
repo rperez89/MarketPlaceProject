@@ -40,24 +40,33 @@ contract MarketPlace is RBAC, Ownable {
         return true;
     }
     
-    
-   function getStoresOfStoreOwner(address storeOwnerAddress) view public
-    returns (address[]) 
+     function getStoreOwners() view public onlyRole(ROLE_ADMIN) returns (address[]) 
     {
+        return storeOwnersList;
+    }
+       
+    
+
+    // StoreOwner functions    
+
+    function addStore(bytes32 storeName) public  returns(bool success){
+       // require(hasRole(msg.sender,ROLE_STOREOWNER));
+        require(storeName.length != 0, "Store name can not be empty");
+        address storecontract = new Store(storeName);
+        theStores[msg.sender].push(storecontract);
+        theStoreList.push(storecontract) - 1;
+        return true;
+    }
+
+    function getStoresOfStoreOwner(address storeOwnerAddress) view public /*onlyRole(ROLE_OWNER)*/ returns (address[]) 
+    {
+        //require(msg.sender == storeOwnerAddress);
         return theStores[storeOwnerAddress];
     }
     
-    function addStore(string storeName) public returns(uint){
-        address storecontract = new Store(storeName);
-        theStores[msg.sender].push(storecontract);
-        return theStoreList.push(storecontract) - 1;
-        
-    }
-    
-    function getStoreName(address storeAddress) view public returns(string){
+    function getStoreName(address storeAddress) view public returns(bytes32){
         return Store(storeAddress).getStoreName();
     }
-    
     /*
     *  Admin Functions
     */
@@ -79,12 +88,7 @@ contract MarketPlace is RBAC, Ownable {
     
     
     
-    function getStoreOwners()  
-    public onlyAdmin 
-    returns (address[]) 
-    {
-        return storeOwnersList;
-    }
+   
      */
     
 }

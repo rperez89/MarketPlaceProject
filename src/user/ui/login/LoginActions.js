@@ -53,7 +53,9 @@ export function loginUser() {
                                 return browserHistory.push(decodeURIComponent(currentLocation.query.redirect))
                             }
                             console.log('result: ' + result);
-                            //return browserHistory.push('/dashboard')
+                            if (result == true) {
+                                return browserHistory.push('/managestoreowners')
+                            }
                         })
                         .catch(function (result) {
                             // If error, go to signup page.

@@ -90,12 +90,12 @@ class Dashboard extends Component {
   };
 
   getStoreName = () => {
-
     let _store = contract(_Store);
     _store.setProvider(web3.currentProvider)
     console.log('before');
-    let instance = _store.at('0x30f5afb13a117704cab30259bdc65cba45e0354c')
-    let name = instance.getStoreName.call({ from: theCoinbase }).then((_name) => { console.log(_name) });
+    let instance = _store.at('0x594ba7f7838b9231021d30d9b2b5299da3971a68')
+
+    let name = instance.getStoreName.call({ from: theCoinbase }).then((_name) => { console.log(web3.toUtf8(_name)) });
 
   }
 
@@ -107,6 +107,7 @@ class Dashboard extends Component {
           <div className="pure-u-1-1">
             <h1>Dashboard</h1>
             <p><strong>Congratulations {this.props.authData.name}!</strong> If you're seeing this page, you've logged in with your own smart contract successfully.</p>
+
             <button onClick={this.addStore()}>AddStore</button>
             <button onClick={this.getStoresOfOwner()}>GetStores</button>
             <button onClick={this.getStoreName}>GetStoreName</button>
