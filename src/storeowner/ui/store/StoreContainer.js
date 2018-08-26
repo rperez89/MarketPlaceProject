@@ -1,11 +1,11 @@
 import { connect } from 'react-redux'
-import ManageStores from './ManageStores'
-import { addStore, getStores, getStoreSelected } from './ManageStoresActions'
+import Store from './Store'
+import { addStore, getStores, getStoreSelected } from '../managestores/ManageStoresActions'
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        storeList: state.storeowner.storeList,
-        currentStore: state.storeowner.currentStore
+        storeAddress: state.storeowner.storeAddress,
+        //currentStore: state.storeowner.currentStore
     }
 }
 
@@ -23,9 +23,9 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-const ManageStoresContainer = connect(
+const StoreContainer = connect(
     mapStateToProps,
     mapDispatchToProps
-)(ManageStores)
+)(Store)
 
-export default ManageStoresContainer
+export default StoreContainer

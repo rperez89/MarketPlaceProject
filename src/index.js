@@ -14,6 +14,7 @@ import SignUp from './user/layouts/signup/SignUp'
 import Profile from './user/layouts/profile/Profile'
 import ManageStoreOwners from './admin/layouts/managestoreowners/ManageStoreOwners';
 import ManageStores from './storeowner/layouts/managestores/ManageStores'
+import Store from './storeowner/layouts/store/Store'
 
 // Redux Store
 import store from './store'
@@ -40,6 +41,7 @@ ReactDOM.render((
         <Route path="profile" component={UserIsAuthenticated(Profile)} />
         <Route path="managestoreowners" component={UserIsAuthenticated(ManageStoreOwners)} />
         <Route path="managestores" component={ManageStores} />
+        <Route path="store" component={Store} />
       </Route>
     </Router>
   </Provider>

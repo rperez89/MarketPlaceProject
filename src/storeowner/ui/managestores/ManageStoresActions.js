@@ -1,16 +1,25 @@
 import MarketPlaceContract from '../../../../build/contracts/MarketPlace.json'
 import store from '../../../store'
 import getWeb3 from '../../../util/web3/getWeb3'
+import { browserHistory } from 'react-router'
 
 const contract = require('truffle-contract')
 
 export const STORE_ADDED = 'STORE_ADDED'
 export const GET_STORES = 'GET_STORES'
+export const STORE_SELECTED = 'STORE_SELECTED'
 
 function storeAdded(storeName) {
     return {
         type: STORE_ADDED,
         payload: storeName
+    }
+}
+
+function storeSelected(storeAddress) {
+    return {
+        type: STORE_SELECTED,
+        payload: storeAddress
     }
 }
 
@@ -62,6 +71,24 @@ export function getStores() {
     } else {
         console.error('Web3 is not initialized.');
     }
+}
+
+export function getStoreSelected(storeAddress) {
+
+    var currentLocation = browserHistory.getCurrentLocation()
+
+    if ('redirect' in currentLocation.query) {
+        return browserHistory.push(decodeURIComponent(currentLocation.query.redirect))
+    }
+    return function (dispatch) {
+        dispatch(storeSelected(storeAddress))
+        return browserHistory.push('/store')
+    }
+    console.log('storeSelected');
+    console.log(storeAddress)
+
+
+
 }
 
 export function addStore(storeName) {

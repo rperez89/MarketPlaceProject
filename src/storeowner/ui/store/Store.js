@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-class ManageStores extends Component {
+class Store extends Component {
 
     constructor(props) {
         super(props)
@@ -8,22 +8,23 @@ class ManageStores extends Component {
         this.state = {
             storeOwnerAddress: '',
             storeList: [],
-            currentStore: this.props.currentStore
+            currentStore: this.props.currentStore,
+            storeAddress: this.props.storeAddress
         }
         let _stores = [];
     }
     componentWillMount() {
-        this._stores = this.props.getStores();
+        //this._stores = this.props.getStores();
         //this._stores.push(this.props.currentStore);
         //this.setState(() => ({ storeList: _storeList }));
 
     }
 
     componentDidUpdate(prevProps) {
-        this._stores = this.props.storeList
-        if (prevProps.currentStore !== this.props.currentStore) {
-            this._stores.push(this.props.currentStore)
-        }
+        // this._stores = this.props.storeList
+        // if (prevProps.currentStore !== this.props.currentStore) {
+        //     this._stores.push(this.props.currentStore)
+        // }
     }
 
     onInputChange = (event) => {
@@ -50,17 +51,14 @@ class ManageStores extends Component {
         /* if (this.props.currentStore) {
              this._stores.push(this.props.currentStore)
          }*/
-        console.log('stores List props')
-        console.log(this.props.storeList)
-        console.log('storessss')
-        console.log(this._stores)
-        console.log('currentStore')
-        console.log(this.props.currentStore)
+        console.log('storeAddress')
+        console.log(this.props.storeAddress)
+
         return (
             <div>
                 < form className="pure-form pure-form-stacked" onSubmit={this.handleSubmit} >
                     <fieldset>
-                        <label htmlFor="name">Name</label>
+                        <label htmlFor="name">Storeeeeeeeeeee</label>
                         <input id="name" type="text" value={this.state.storeOwnerAddress} onChange={this.onInputChange} placeholder="Store Name" />
                         <span className="pure-form-message">This is a required field.</span>
 
@@ -71,14 +69,10 @@ class ManageStores extends Component {
                     </fieldset>
                 </form >
 
-                <ul>
-                    {this._stores ? this._stores.map((store, index) => { return <li key={index}>{store}</li> }) :
-                        this.props.storeList.map((store, index) => { return <li key={index} onClick={this.handleStoreOnClik.bind(this, store)}>{store}</li> })
-                    }
-                </ul>
+
             </div>
         )
     }
 }
 
-export default ManageStores
+export default Store

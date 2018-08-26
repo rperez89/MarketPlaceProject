@@ -1,6 +1,7 @@
 const initialState = {
     storeList: [],
-    currentStore: ''
+    currentStore: '',
+    storeAddress: ''
 }
 
 const storeOwnerReducer = (state = initialState, action) => {
@@ -12,6 +13,11 @@ const storeOwnerReducer = (state = initialState, action) => {
     if (action.type === 'GET_STORES') {
         return Object.assign({}, state, {
             storeList: action.payload
+        })
+    }
+    if (action.type === 'STORE_SELECTED') {
+        return Object.assign({}, state, {
+            storeAddress: action.payload
         })
     }
     return state
