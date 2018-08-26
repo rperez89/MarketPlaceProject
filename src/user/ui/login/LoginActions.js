@@ -52,7 +52,7 @@ export function loginUser() {
                             if ('redirect' in currentLocation.query) {
                                 return browserHistory.push(decodeURIComponent(currentLocation.query.redirect))
                             }
-                            console.log('result: ' + result);
+                            console.log('result Admin: ' + result);
                             if (result == true) {
                                 return browserHistory.push('/managestoreowners')
                             }
@@ -62,7 +62,34 @@ export function loginUser() {
                             console.error('Wallet ' + coinbase + ' does not have an account!')
 
                             return browserHistory.push('/signup')
+                        });
+
+                    marketplaceInstance.accountHasRole(coinbase, 'storeowner', { from: coinbase })
+                        .then(function (result) {
+                            // If no error, login user.
+                            //var userName = web3.toUtf8(result)
+
+                            dispatch(userLoggedIn({ "name": 'userName' }))
+
+                            // Used a manual redirect here as opposed to a wrapper.
+                            // This way, once logged in a user can still access the home page.
+                            var currentLocation = browserHistory.getCurrentLocation()
+
+                            if ('redirect' in currentLocation.query) {
+                                return browserHistory.push(decodeURIComponent(currentLocation.query.redirect))
+                            }
+                            console.log('result StoreOwner: ' + result);
+                            if (result == true) {
+                                return browserHistory.push('/managestores')
+                            }
                         })
+                        .catch(function (result) {
+                            // If error, go to signup page.
+                            console.error('Wallet ' + coinbase + ' does not have an account!')
+
+                            return browserHistory.push('/signup')
+                        })
+
                 })
             })
         }

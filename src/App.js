@@ -5,7 +5,7 @@ import { HiddenOnlyAuth, VisibleOnlyAuth } from './util/wrappers.js'
 // UI Components
 import LoginButtonContainer from './user/ui/loginbutton/LoginButtonContainer'
 import LogoutButtonContainer from './user/ui/logoutbutton/LogoutButtonContainer'
-import LoginButton from './user/ui/login/LoginContainer'
+import LoginContainer from './user/ui/login/LoginContainer'
 // Styles
 import './css/oswald.css'
 import './css/open-sans.css'
@@ -41,7 +41,7 @@ class App extends Component {
           <ul className="pure-menu-list navbar-right">
             <OnlyGuestLinks />
             <OnlyAuthLinks />
-            <span> <LoginButton /> </span>
+            <span> <span><LoginContainer /> </span></span>
           </ul>
           <Link to="/" className="pure-menu-heading pure-menu-link">Truffle Box</Link>
         </nav>

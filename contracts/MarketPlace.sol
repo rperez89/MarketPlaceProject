@@ -43,14 +43,13 @@ contract MarketPlace is RBAC, Ownable {
      function getStoreOwners() view public onlyRole(ROLE_ADMIN) returns (address[]) 
     {
         return storeOwnersList;
-    }
-       
+    }      
     
 
     // StoreOwner functions    
 
-    function addStore(bytes32 storeName) public  returns(bool success){
-       // require(hasRole(msg.sender,ROLE_STOREOWNER));
+    function addStore(bytes32 storeName) public onlyRole(ROLE_STOREOWNER) returns(bool success){
+        require(hasRole(msg.sender,ROLE_STOREOWNER),"Only StoreOwners can create stores");
         require(storeName.length != 0, "Store name can not be empty");
         address storecontract = new Store(storeName);
         theStores[msg.sender].push(storecontract);
@@ -58,9 +57,9 @@ contract MarketPlace is RBAC, Ownable {
         return true;
     }
 
-    function getStoresOfStoreOwner(address storeOwnerAddress) view public /*onlyRole(ROLE_OWNER)*/ returns (address[]) 
+    function getStoresOfStoreOwner(address storeOwnerAddress) view public onlyRole(ROLE_STOREOWNER) returns (address[]) 
     {
-        //require(msg.sender == storeOwnerAddress);
+        require(msg.sender == storeOwnerAddress);
         return theStores[storeOwnerAddress];
     }
     
