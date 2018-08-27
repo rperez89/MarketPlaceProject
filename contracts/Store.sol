@@ -1,9 +1,12 @@
 pragma solidity ^0.4.11;
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
+import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
 contract Store is Ownable, Pausable{
- 
+    
+    using SafeMath for uint256;
+
     address public owner;
     string public storeName;
     uint256 public balance;
@@ -35,8 +38,8 @@ contract Store is Ownable, Pausable{
     
     constructor(string _storeName) public {
         storeName = _storeName;
-       balance = 0;
-       productCount = 0;
+        balance = 0;
+        productCount = 0;
     }
     
     function isProductValid(Product product) private pure returns (bool isValid) {
@@ -75,16 +78,27 @@ contract Store is Ownable, Pausable{
     }
     
     /**
+     * @dev Get product by id
+     * @param _id Product Id      
+     */
+    function getProduct(uint _id) public view returns (string name, uint price, uint stock) {
+        require(products[_id].isEntity == true);
+        return (products[_id].product.name,
+                products[_id].product.price,
+                products[_id].product.stock);
+    }
+
+    /**
      * @notice Buy a product
      * @param _id Product to buy 
      * @param _quantity The number of product items
      */
     function buyProduct(uint _id, uint _quantity) public payable whenNotPaused returns (bool success) {
         Product memory product = products[_id].product;
-        uint totalPrice = product.price * _quantity;
+        uint totalPrice = product.price.mul(_quantity);
         if (msg.value >= totalPrice && product.stock >= _quantity) {
-            balance += msg.value;
-            product.stock -= _quantity;
+            balance = balance.add(msg.value);  
+            product.stock = product.stock.sub(_quantity);         
             pendingWithdrawals[owner] = balance;
             emit ProductPurchaseSuccessful(_id, product.stock);
             return true;
