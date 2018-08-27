@@ -11,9 +11,13 @@ import './css/oswald.css'
 import './css/open-sans.css'
 import './css/pure-min.css'
 import './App.css'
+import store from './store'
 
 class App extends Component {
   render() {
+    let _web3 = store.getState().web3.web3Instance;
+    console.log('WEB#')
+    console.dir(_web3)
     const OnlyAuthLinks = VisibleOnlyAuth(() =>
       <span>
         <li className="pure-menu-item">

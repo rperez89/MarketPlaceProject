@@ -19,7 +19,8 @@ const mapDispatchToProps = (dispatch) => {
         },
         onStoreClick: (storeAddress) => {
             dispatch(getStoreSelected(storeAddress))
-        }
+        },
+
     }
 }
 

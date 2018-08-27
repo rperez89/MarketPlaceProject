@@ -2,9 +2,14 @@ pragma solidity ^0.4.2;
 import "./Store.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "openzeppelin-solidity/contracts/access/rbac/RBAC.sol";
+import "openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
 
+/**
+ * @title MarketPlace
+ * @dev Marketplace and store factory
+ */
 
-contract MarketPlace is RBAC, Ownable {
+contract MarketPlace is RBAC, Ownable, Pausable {
     
     string constant ROLE_STOREOWNER = "storeowner";
     string constant ROLE_OWNER = "owner";
@@ -17,16 +22,15 @@ contract MarketPlace is RBAC, Ownable {
     //StorOwners
     address[] public storeOwnersList;
     
-   mapping(address => address[]) theStores;
-    address[] theStoreList;
+    mapping(address => address[]) stores;
+    address[] storeList;
     
     
-    constructor() public payable {
+    constructor() public {
         require(msg.sender != 0);
         addRole(msg.sender, ROLE_ADMIN);
-        // addRole(msg.sender, ROLE_OWNER);
-       // addRole(msg.sender, ROLE_ADMIN);
-    }
+        
+    }    
     
     function accountHasRole (address _address, string role) view public returns (bool) {
         return hasRole(_address,role);
@@ -38,35 +42,33 @@ contract MarketPlace is RBAC, Ownable {
         addRole(storeOwnerAddress, ROLE_STOREOWNER);
         storeOwnersList.push(storeOwnerAddress) - 1;
         return true;
-    }
+    }    
     
-     function getStoreOwners() view public onlyRole(ROLE_ADMIN) returns (address[]) 
-    {
-        return storeOwnersList;
-    }      
-    
-
-    // StoreOwner functions    
-
-    function addStore(bytes32 storeName) public onlyRole(ROLE_STOREOWNER) returns(bool success){
-        require(hasRole(msg.sender,ROLE_STOREOWNER),"Only StoreOwners can create stores");
-        require(storeName.length != 0, "Store name can not be empty");
-        address storecontract = new Store(storeName);
-        theStores[msg.sender].push(storecontract);
-        theStoreList.push(storecontract) - 1;
-        return true;
-    }
-
-    function getStoresOfStoreOwner(address storeOwnerAddress) view public onlyRole(ROLE_STOREOWNER) returns (address[]) 
+   function getStoresOfStoreOwner(address storeOwnerAddress)  public onlyRole(ROLE_STOREOWNER)
+    returns (address[]) 
     {
         require(msg.sender == storeOwnerAddress);
-        return theStores[storeOwnerAddress];
+        return stores[storeOwnerAddress];
     }
     
-    function getStoreName(address storeAddress) view public returns(bytes32){
+    function addStore(string storeName) public onlyRole(ROLE_STOREOWNER) returns(bool success){
+        require(hasRole(msg.sender,ROLE_STOREOWNER));
+        //require(storeName.length != 0, "Store name can not be empty");
+        address storecontract = new Store(storeName);
+        stores[msg.sender].push(storecontract);
+        storeList.push(storecontract) - 1;
+        return true;
+    }
+    
+    function getStoreName(address storeAddress) view public returns(string){
         return Store(storeAddress).getStoreName();
     }
-    /*
+
+    function getAllStores() view public returns (address[]){
+        return storeList;
+    }
+    
+        /*
     *  Admin Functions
     */
     
@@ -87,7 +89,12 @@ contract MarketPlace is RBAC, Ownable {
     
     
     
-   
+    function getStoreOwners()  
+    public onlyAdmin 
+    returns (address[]) 
+    {
+        return storeOwnersList;
+    }
      */
     
 }

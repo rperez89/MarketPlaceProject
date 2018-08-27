@@ -7,7 +7,6 @@ class Store extends Component {
             <main className="container">
                 <div className="pure-g">
                     <div className="pure-u-1-1">
-                        <h1>Store</h1>
                         <p></p>
                         <StoreContainer />
                     </div>

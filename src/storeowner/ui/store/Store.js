@@ -9,7 +9,8 @@ class Store extends Component {
             storeOwnerAddress: '',
             storeList: [],
             currentStore: this.props.currentStore,
-            storeAddress: this.props.storeAddress
+            storeAddress: this.props.storeAddress,
+            storeName: this.props.storeName
         }
         let _stores = [];
     }
@@ -17,6 +18,12 @@ class Store extends Component {
         //this._stores = this.props.getStores();
         //this._stores.push(this.props.currentStore);
         //this.setState(() => ({ storeList: _storeList }));
+        const storeName = this.props.storeName
+        console.log('NAME2')
+        console.log(storeName)
+
+
+
 
     }
 
@@ -25,6 +32,9 @@ class Store extends Component {
         // if (prevProps.currentStore !== this.props.currentStore) {
         //     this._stores.push(this.props.currentStore)
         // }
+        //const storeName = this.props.getCurrentStoreName();
+
+
     }
 
     onInputChange = (event) => {
@@ -34,11 +44,12 @@ class Store extends Component {
     handleSubmit = (event) => {
         event.preventDefault()
 
-        if (this.state.storeOwnerAddress < 42) {
-            return alert('Please fill in the store owner address.')
-        }
+        //  if (this.state.storeOwnerAddress < 42) {
+        //      return alert('Please fill in the store owner address.')
+        // }
 
-        this.props.onSignUpFormSubmit(this.state.storeOwnerAddress)
+        //this.props.onSignUpFormSubmit(this.state.storeOwnerAddress)
+        this.props.getCurrentStoreName();
 
     }
 
@@ -51,15 +62,26 @@ class Store extends Component {
         /* if (this.props.currentStore) {
              this._stores.push(this.props.currentStore)
          }*/
-        console.log('storeAddress')
-        console.log(this.props.storeAddress)
+
 
         return (
             <div>
+                <div>
+                    <h1> {this.props.storeName && this.props.storeName} </h1>
+                    <h2> Add a new Product</h2>
+                </div>
                 < form className="pure-form pure-form-stacked" onSubmit={this.handleSubmit} >
                     <fieldset>
-                        <label htmlFor="name">Storeeeeeeeeeee</label>
-                        <input id="name" type="text" value={this.state.storeOwnerAddress} onChange={this.onInputChange} placeholder="Store Name" />
+                        <label htmlFor="name">Name </label>
+                        <input id="name" type="text" value={this.state.storeOwnerAddress} onChange={this.onInputChange} placeholder="Product Name" />
+                        <span className="pure-form-message">This is a required field.</span>
+
+                        <label htmlFor="price">Price </label>
+                        <input id="price" type="text" value={this.state.storeOwnerAddress} onChange={this.onInputChange} placeholder="Product Price" />
+                        <span className="pure-form-message">This is a required field.</span>
+
+                        <label htmlFor="quantity">Quantity </label>
+                        <input id="quantity" type="text" value={this.state.storeOwnerAddress} onChange={this.onInputChange} placeholder="Product Quantity" />
                         <span className="pure-form-message">This is a required field.</span>
 
                         <br />

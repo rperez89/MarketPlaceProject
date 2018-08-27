@@ -1,10 +1,11 @@
 import { connect } from 'react-redux'
 import ManageStoreOwners from './ManageStoreOwners'
-import { addStoreOwner, getStoreOwners } from './ManageStoreOwnersActions'
+import { addStoreOwner, getStoreOwners, getAccountAddress } from './ManageStoreOwnersActions'
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        storeOwnerList: state.admin.storeOwnerList
+        storeOwnerList: state.admin.storeOwnerList,
+        address: state.admin.address
     }
 }
 
@@ -15,6 +16,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         getStoreOwners: () => {
             dispatch(getStoreOwners())
+        },
+        getAddress: () => {
+            dispatch(getAccountAddress())
         }
     }
 }

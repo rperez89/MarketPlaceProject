@@ -13,7 +13,7 @@ class ManageStores extends Component {
         let _stores = [];
     }
     componentWillMount() {
-        this._stores = this.props.getStores();
+        //this._stores = this.props.getStores();
         //this._stores.push(this.props.currentStore);
         //this.setState(() => ({ storeList: _storeList }));
 

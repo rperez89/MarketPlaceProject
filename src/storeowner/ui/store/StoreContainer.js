@@ -1,11 +1,11 @@
 import { connect } from 'react-redux'
 import Store from './Store'
-import { addStore, getStores, getStoreSelected } from '../managestores/ManageStoresActions'
+import { addStore, getStores, getStoreSelected, getStoreName, getStoreInfo } from '../managestores/ManageStoresActions'
 
 const mapStateToProps = (state, ownProps) => {
     return {
         storeAddress: state.storeowner.storeAddress,
-        //currentStore: state.storeowner.currentStore
+        storeName: state.storeowner.storeName
     }
 }
 
@@ -19,6 +19,12 @@ const mapDispatchToProps = (dispatch) => {
         },
         onStoreClick: (storeAddress) => {
             dispatch(getStoreSelected(storeAddress))
+        },
+        getCurrentStoreName: () => {
+            dispatch(getStoreName())
+        },
+        getStoreInfo: () => {
+            dispatch(getStoreInfo())
         }
     }
 }
