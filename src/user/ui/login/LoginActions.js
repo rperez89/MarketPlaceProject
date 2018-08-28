@@ -1,4 +1,3 @@
-import AuthenticationContract from '../../../../build/contracts/Authentication.json'
 import MarketPlace from '../../../../build/contracts/MarketPlace.json'
 import { browserHistory } from 'react-router'
 import store from '../../../store'
@@ -20,11 +19,9 @@ export function loginUser() {
     if (typeof web3 !== 'undefined') {
 
         return function (dispatch) {
-            // Using truffle-contract we create the authentication object.
             const marketplace = contract(MarketPlace)
             marketplace.setProvider(web3.currentProvider)
 
-            // Declaring this for later so we can chain functions on Authentication.
             var marketplaceInstance
 
             // Get current ethereum wallet.
