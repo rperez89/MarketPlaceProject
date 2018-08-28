@@ -7,7 +7,7 @@ contract Store is Ownable, Pausable{
     
     using SafeMath for uint256;
 
-    address public owner;
+    address public storeOwner;
     string public storeName;
     uint256 public balance;
     uint256 public productCount;
@@ -28,15 +28,31 @@ contract Store is Ownable, Pausable{
     mapping(uint => EntityStruct) public products;
     mapping (address => uint) pendingWithdrawals;
     
-    /* Events */
+    // Events 
     
-    event NewProductAdded(uint productId);
+    event ProductAdded(uint productId);
     event ProductPriceUpdatedSuccessfully(uint productId, uint newPrice);
     event ProductPurchaseSuccessful(uint productId, uint remainingStock);
+        
+    //Modifier
+
+     /**
+    * @dev Throws if called by any account other than owner.
+    */
+    modifier onlyStoreOwner {
+        require(msg.sender == storeOwner);
+        _;
+    }
+
+    ///Functions
     
-    
-    
-    constructor(string _storeName) public {
+    /**
+    * @notice Constructor
+    * @param _storeOwner Address of the owner of the Store
+    * @param _storeName Name of the store
+    */
+    constructor(address _storeOwner, string _storeName) public {
+        storeOwner = _storeOwner;
         storeName = _storeName;
         balance = 0;
         productCount = 0;
@@ -44,8 +60,12 @@ contract Store is Ownable, Pausable{
     
     function isProductValid(Product product) private pure returns (bool isValid) {
         return (product.price > 0 );
-    } 
-    
+    }     
+
+    function getStoreName() view public returns (string) {
+        return storeName;
+    }
+        
     
     /**
      * @notice Add a new product to the store
@@ -54,12 +74,12 @@ contract Store is Ownable, Pausable{
      * @param _price Price of the new product on WEI
      * @param _stock Initial stock of the new product
      */
-    function addNewProduct(uint _id, string _name, uint _price, uint _stock) public onlyOwner whenNotPaused returns (bool success) {
+    function addNewProduct(uint _id, string _name, uint _price, uint _stock) public onlyStoreOwner whenNotPaused returns (bool success) {
         Product memory newProduct = Product(_id, _name, _price, _stock);
         if (isProductValid(newProduct)) {
             products[_id].product = newProduct;
             products[_id].isEntity = true;
-            emit NewProductAdded(_id);
+            emit ProductAdded(_id);
             return true;
         }
         return false;
@@ -70,7 +90,7 @@ contract Store is Ownable, Pausable{
      * @param _id Product to be updated 
      * @param _price New Price for the product on WEI
      */
-    function updateProductPrice(uint _id, uint _price) public onlyOwner whenNotPaused returns (bool success){
+    function updateProductPrice(uint _id, uint _price) public onlyStoreOwner whenNotPaused returns (bool success){
         require(products[_id].isEntity == true);
         products[_id].product.price = _price;
         emit ProductPriceUpdatedSuccessfully(_id,_price);
@@ -94,13 +114,12 @@ contract Store is Ownable, Pausable{
      * @param _quantity The number of product items
      */
     function buyProduct(uint _id, uint _quantity) public payable whenNotPaused returns (bool success) {
-        Product memory product = products[_id].product;
-        uint totalPrice = product.price.mul(_quantity);
-        if (msg.value >= totalPrice && product.stock >= _quantity) {
+        uint totalPrice = products[_id].product.price.mul(_quantity);
+        if (msg.value >= totalPrice && products[_id].product.stock >= _quantity) {
             balance = balance.add(msg.value);  
-            product.stock = product.stock.sub(_quantity);         
+            products[_id].product.stock = products[_id].product.stock.sub(_quantity);         
             pendingWithdrawals[owner] = balance;
-            emit ProductPurchaseSuccessful(_id, product.stock);
+            emit ProductPurchaseSuccessful(_id, products[_id].product.stock);
             return true;
         }
         return false;
@@ -109,22 +128,12 @@ contract Store is Ownable, Pausable{
     /**
      * @notice Withdraw balance to the store owner
      */
-    function withdraw() public onlyOwner {
+    function withdraw() public onlyStoreOwner {
         uint amount = pendingWithdrawals[owner];
         pendingWithdrawals[owner] = 0;
         balance = 0;
         msg.sender.transfer(amount);
     }
-    
-
-    function getStoreName() returns (string) {
-        return storeName;
-    }
-    
-     function getStoreInfo() view public returns (string, uint256, uint256) {
-        return (storeName, balance , productCount);
-    }
- 
-   
+         
  
 }

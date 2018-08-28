@@ -151,8 +151,8 @@
           }
         ],
         "contractDependencies": [
-          195,
-          154
+          154,
+          195
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -1910,8 +1910,8 @@
           }
         ],
         "contractDependencies": [
-          195,
-          154
+          154,
+          195
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -3628,5 +3628,5 @@
     }
   },
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-08-27T02:07:13.615Z"
+  "updatedAt": "2018-08-27T23:07:54.812Z"
 }

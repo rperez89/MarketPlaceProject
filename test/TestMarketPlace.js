@@ -3,6 +3,9 @@ var Store = artifacts.require("./Store.sol");
 
 contract('MarketPlace', function (accounts) {
 
+    /**
+  * @dev Check if when the contract is deployed the admin is added
+  */
     it("should have admin role", function () {
         return MarketPlace.deployed().then(async (instance) => {
             MarketPlaceInstance = instance;
@@ -11,6 +14,9 @@ contract('MarketPlace', function (accounts) {
         })
     })
 
+    /**
+   * @dev Check an storeowner is added by calling accountHasRole after adding it.
+   */
     it("...should add the storeOwner 0x47259D94C533DB3fed98029feB2aF898DbDCA4DF.", function () {
         return MarketPlace.deployed().then(function (instance) {
             MarketPlaceInstance = instance;
@@ -23,6 +29,9 @@ contract('MarketPlace', function (accounts) {
         });
     })
 
+    /**
+  * @dev Check if has storeowner role
+  */
     it("should have storeOwner role", function () {
         return MarketPlace.deployed().then(async (instance) => {
             MarketPlaceInstance = instance;
@@ -31,6 +40,9 @@ contract('MarketPlace', function (accounts) {
         })
     })
 
+    /**
+   * @dev Check if  the store was created by comparing the name
+   */
     it("Should create a new store with name TestStore", function () {
         return MarketPlace.deployed().then(async (instance) => {
             MarketPlaceInstance = instance;
@@ -45,7 +57,9 @@ contract('MarketPlace', function (accounts) {
         })
     })
 
-
+    /**
+  * @dev Check if all the stores are returned
+  */
     it("Should be 3 stores created", function () {
         return MarketPlace.deployed().then(async (instance) => {
             MarketPlaceInstance = instance;

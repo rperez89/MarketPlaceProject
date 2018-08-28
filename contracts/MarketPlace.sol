@@ -54,7 +54,7 @@ contract MarketPlace is RBAC, Ownable, Pausable {
     function addStore(string storeName) public onlyRole(ROLE_STOREOWNER) returns(bool success){
         require(hasRole(msg.sender,ROLE_STOREOWNER));
         //require(storeName.length != 0, "Store name can not be empty");
-        address storecontract = new Store(storeName);
+        address storecontract = new Store(msg.sender,storeName);
         stores[msg.sender].push(storecontract);
         storeList.push(storecontract) - 1;
         return true;
