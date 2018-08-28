@@ -1,4 +1,3 @@
-
 var Store = artifacts.require("./Store.sol");
 
 contract('Store', function (accounts) {
@@ -60,44 +59,36 @@ contract('Store', function (accounts) {
     * @dev Check if the product was succesfully bought, store balance and product quantity must change
     */
     it('should buy product with id:1, decrease product quantity by 1 and increase the store balance by 100000 ', async () => {
-        await storeContractInstance.buyProduct(1, 1, { from: accounts[1], value: web3.toBigNumber(2000000000000) })
+        await storeContractInstance.buyProduct(1, 1, { from: accounts[1], value: web3.toBigNumber(100000) })
         const product = await storeContractInstance.getProduct(1, { from: owner })
         const productStock = product[2]
         const storeBalance = await storeContractInstance.balance.call({ from: owner });
         assert.equal(Number(productStock), 9, "Incorrect Product stock number")
-        assert.equal(Number(storeBalance), 2000000000000, "Incorrect store balance")
-    })
-
-    it('should withdraw all the store balance to the owner ', async () => {
-        function getTransactionGasCost(tx) {
-            let transaction = web3.eth.getTransactionReceipt(tx);
-            let amount = transaction.gasUsed;
-            let price = web3.eth.getTransaction(tx).gasPrice;
-
-            return web3.toBigNumber(price * amount);
-        }
-        let initialBalance = web3.eth.getBalance(owner);
-        let initBalance = web3.fromWei(initialBalance)
-        const storeBalance = await storeContractInstance.balance.call({ from: owner });
-        let withdrawal = await storeContractInstance.withdraw({ from: owner });
-        var finalBalance = web3.eth.getBalance(owner);
-        let finBalance = web3.fromWei(finalBalance)
-        const storeBalance2 = await storeContractInstance.balance.call({ from: owner });
-        let gasCost = getTransactionGasCost(withdrawal["tx"]);
-        let gCost = web3.fromWei(gasCost);
-        finalBalance.minus(initialBalance).minus(gasCost);
-        const ret = 'initStoreBalance: ' + storeBalance.toString() + 'initial: ' + initBalance.toString() + ' gCost: ' + gCost.toString() + ' FinalStoreBalance: ' + storeBalance2.toString()
-
-        assert.equal(
-            Number(finBalance.toNumber()),
-            1,
-            ret
-        );
-
-
+        assert.equal(Number(storeBalance), 100000, "Incorrect store balance")
     })
 
 
+    /**
+    * @dev Check if the owner new owner is founded with the store balance after the withdrawal
+    */
+    it('should withdraw the balance store correctly', async () => {
+        //Owner Balance before transaction
+        const ownerBalanceBefore = web3.fromWei(web3.eth.getBalance(owner).toNumber())
+        const amount = web3.fromWei(await storeContractInstance.balance.call({ from: owner }))
+        const transaction = await storeContractInstance.withdraw({ from: owner });
+
+        //Get gasCost
+        const gasUsed = web3.eth.getTransactionReceipt(transaction['tx']).gasUsed
+        const gasPrice = web3.eth.getTransaction(transaction['tx']).gasPrice
+        const gasCost = web3.fromWei((gasUsed * gasPrice))
+
+        const ownerBalanceAfter = web3.fromWei(web3.eth.getBalance(owner).toNumber())
+
+        //fromWei method returns strings, have to append a '+' to add the values
+        const expectedBalance = +amount + +ownerBalanceBefore - +gasCost
+
+        assert.equal(expectedBalance, ownerBalanceAfter, 'Amount not withdrawn correctly')
+    })
 });
 
 

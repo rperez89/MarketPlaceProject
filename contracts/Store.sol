@@ -3,6 +3,11 @@ import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
+/**
+ * @title Store
+ * @dev Store contract
+ */
+
 contract Store is Ownable, Pausable{
     
     using SafeMath for uint256;
@@ -33,6 +38,7 @@ contract Store is Ownable, Pausable{
     event ProductAdded(uint productId);
     event ProductPriceUpdatedSuccessfully(uint productId, uint newPrice);
     event ProductPurchaseSuccessful(uint productId, uint remainingStock);
+    
         
     //Modifier
 
@@ -58,8 +64,12 @@ contract Store is Ownable, Pausable{
         productCount = 0;
     }
     
-    function isProductValid(Product product) private pure returns (bool isValid) {
-        return (product.price > 0 );
+    /**
+    * @notice Function to validate product
+    * @param _product The product to be checked    
+    */
+    function isProductValid(Product _product) private pure returns (bool isValid) {
+        return (_product.price > 0 );
     }     
 
     function getStoreName() view public returns (string) {
@@ -114,6 +124,7 @@ contract Store is Ownable, Pausable{
      * @param _quantity The number of product items
      */
     function buyProduct(uint _id, uint _quantity) public payable whenNotPaused returns (bool success) {
+        require(products[_id].isEntity == true);
         uint totalPrice = products[_id].product.price.mul(_quantity);
         if (msg.value >= totalPrice && products[_id].product.stock >= _quantity) {
             balance = balance.add(msg.value);  

@@ -43,11 +43,11 @@ class App extends Component {
       <div className="App">
         <nav className="navbar pure-menu pure-menu-horizontal">
           <ul className="pure-menu-list navbar-right">
-            <OnlyGuestLinks />
-            <OnlyAuthLinks />
+            {/* <OnlyGuestLinks />
+            <OnlyAuthLinks /> */}
             <span> <span><LoginContainer /> </span></span>
           </ul>
-          <Link to="/" className="pure-menu-heading pure-menu-link">Truffle Box</Link>
+          <Link to="/" className="pure-menu-heading pure-menu-link">MarketPlace</Link>
         </nav>
 
         {this.props.children}

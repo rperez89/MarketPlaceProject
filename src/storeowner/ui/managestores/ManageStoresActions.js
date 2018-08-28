@@ -68,7 +68,6 @@ export function getStores() {
                     console.error(error);
                 }
 
-
                 marketplace.deployed().then(function (instance) {
                     marketplaceInstance = instance
 
